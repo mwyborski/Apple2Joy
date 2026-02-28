@@ -58,6 +58,10 @@ target_include_directories(apple2joy_lib INTERFACE
     ${CMAKE_CURRENT_LIST_DIR}/include
 )
 
+target_link_libraries(apple2joy_lib INTERFACE
+    pico_multicore
+)
+
 # --- Firmware executable ---
 if(APPLE2JOY_BUILD_FIRMWARE)
     add_executable(apple2joy_firmware

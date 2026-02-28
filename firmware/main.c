@@ -55,6 +55,7 @@ int main(void)
     /* Initialize Apple IIe output (MCP4251 + buttons) */
     apple2joy_config_t joy_config = APPLE2JOY_DEFAULT_CONFIG;
     apple2joy_init(&joy_config);
+    apple2joy_start_async();
 
     /* Uncomment to run hardware test on startup */
     /* apple2joy_run_test(); */

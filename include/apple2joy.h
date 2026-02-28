@@ -61,14 +61,31 @@ typedef struct {
 void apple2joy_init(const apple2joy_config_t *config);
 
 /**
+ * Launch the output driver on core1 for lowest-latency operation.
+ *
+ * After this call, apple2joy_update() and apple2joy_set_defaults()
+ * become non-blocking: they pack the input into a single 32-bit word
+ * and push it to the multicore FIFO. Core1 pops the word and performs
+ * the actual SPI and GPIO writes.
+ *
+ * Must be called after apple2joy_init().
+ */
+void apple2joy_start_async(void);
+
+/**
  * Update Apple IIe outputs from gamepad state.
  * When D-pad is active (dpad < 8), it overrides analog axes with
  * fixed directional values. Otherwise analog X/Y pass through.
+ *
+ * In async mode (after apple2joy_start_async()), this returns
+ * immediately after a single FIFO push.
  */
 void apple2joy_update(const apple2joy_input_t *input);
 
 /**
  * Reset outputs to default (centered axes, buttons released).
+ *
+ * In async mode, this returns immediately after a single FIFO push.
  */
 void apple2joy_set_defaults(void);
 
