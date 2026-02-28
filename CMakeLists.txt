@@ -18,7 +18,7 @@ if(APPLE2JOY_BUILD_FIRMWARE)
         find_package(Git QUIET)
         if(GIT_FOUND)
             execute_process(
-                COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive -- lib/tjuh
+                COMMAND ${GIT_EXECUTABLE} submodule update --init --remote --recursive -- lib/tjuh
                 WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
                 RESULT_VARIABLE git_result
                 OUTPUT_VARIABLE git_output
