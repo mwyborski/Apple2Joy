@@ -13,13 +13,33 @@ if(APPLE2JOY_BUILD_FIRMWARE)
     pico_sdk_init()
 
     # TJUH dependency (expected as git submodule in lib/tjuh/)
-    if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/lib/tjuh/CMakeLists.txt)
-        add_subdirectory(lib/tjuh)
-    else()
-        message(FATAL_ERROR
-            "TJUH not found at lib/tjuh/. "
-            "Run: git submodule add https://github.com/mwyborski/tjuh.git lib/tjuh")
+    if(NOT EXISTS ${CMAKE_CURRENT_LIST_DIR}/lib/tjuh/CMakeLists.txt)
+        message(STATUS "TJUH not found — attempting automatic submodule initialization...")
+        find_package(Git QUIET)
+        if(GIT_FOUND)
+            execute_process(
+                COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive -- lib/tjuh
+                WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+                RESULT_VARIABLE git_result
+                OUTPUT_VARIABLE git_output
+                ERROR_VARIABLE  git_error
+            )
+            if(NOT git_result EQUAL 0)
+                # Submodule entry may not exist yet — try adding it
+                execute_process(
+                    COMMAND ${GIT_EXECUTABLE} submodule add https://github.com/mwyborski/tjuh.git lib/tjuh
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+                    RESULT_VARIABLE git_result
+                )
+            endif()
+        endif()
+        if(NOT EXISTS ${CMAKE_CURRENT_LIST_DIR}/lib/tjuh/CMakeLists.txt)
+            message(FATAL_ERROR
+                "TJUH could not be fetched automatically. "
+                "Run manually: git submodule add https://github.com/mwyborski/tjuh.git lib/tjuh")
+        endif()
     endif()
+    add_subdirectory(lib/tjuh)
 else()
     # Library-only mode: no Pico SDK project wrapper needed.
     # The consuming project is responsible for pico_sdk_init().

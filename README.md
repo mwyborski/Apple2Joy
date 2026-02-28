@@ -6,16 +6,18 @@ The adapter supports multiple joysticks through a USB hub and the Pico's OTG por
 
 ## Supported Controllers
 
-| Controller              | Status |
-| ----------------------- | ------ |
-| PS5 DualSense           | ✓      |
-| PS4 DualShock 4         | ✓      |
-| Xbox 360 Wired          | ✓      |
-| 8BitDo SN30 Pro         | ✓      |
-| Competition Pro USB     | ✓      |
-| Generic USB 1.1 Gamepad | ✓      |
-| Xbox One                | ✗      |
-| PS3 Controller          | ✗      |
+| Controller               | Status |
+| ------------------------ | ------ |
+| PS5 DualSense            | ✓      |
+| PS5 DualSense Edge       | ✓      |
+| PS4 DualShock 4 (v1/v2)  | ✓      |
+| Xbox 360 Wired           | ✓      |
+| Switch Pro Controller    | ✓      |
+| 8BitDo SN30 Pro          | ✓      |
+| Competition Pro USB      | ✓      |
+| Generic USB 1.1 Gamepad  | ✓      |
+| Xbox One                 | ✗      |
+| PS3 Controller           | ✗      |
 
 ## Project Structure
 
@@ -92,7 +94,11 @@ When the D-pad is active, it overrides analog input with fixed directional value
 ```bash
 git clone https://github.com/mwyborski/apple2joy.git
 cd apple2joy
-git submodule add https://github.com/mwyborski/tjuh.git lib/tjuh
+```
+
+The TJUH dependency is fetched automatically during the first CMake configure if `lib/tjuh/` is not present. To fetch it manually instead:
+
+```bash
 git submodule update --init
 ```
 
